@@ -7,8 +7,7 @@ Bundler.require(:default)
 $width=14
 $height=9
 $record=-1
-def get_board(width, height)
-  # TODO: Implement this method
+def get_board(width, height) #returns a randomly generated board
   colours=[:red, :blue, :green, :yellow, :cyan, :magenta]
   
   $board=[]
@@ -22,23 +21,7 @@ def get_board(width, height)
   	end
   	$board << $row
   end
-  
   return $board
-
-  # This method should return a two-dimensional $board.
-  # Each element of the $board should be one of the
-  # following values (These are "symbols", you can use
-  # them like constant values):
-  # :red
-  # :blue
-  # :green
-  # :yellow
-  # :cyan
-  # :magenta
-  #
-  # It is important that this method is used because
-  # this will be used for checking the functionality
-  # of your implementation.
 end
 
 #displaying the board
@@ -62,8 +45,11 @@ def change_board_size
 	puts "The board size has been changed to #{$width} x #{$height}."
 end
 
-def update(color, i, j)
+def update(color, i, j) 
 	oldcolor=$board[i][j]
+	if oldcolor==color
+		return
+	end
 	$board[i][j]=color
 	if i+1<$height && $board[i+1][j]==oldcolor
 		update(color, i+1, j)
@@ -81,9 +67,21 @@ end
 
 def play_game
 	x=0
-	comp=0
+	fieldsCount=0
+	choice=$board[0][0] #at the beginning of the game ill count the initial completion
+	for i in 0..$board.length-1
+		for j in 0..$board[i].length-1
+			if $board[i][j]==choice
+				fieldsCount+=1
+			end
+		end
+	end
+	comp=fieldsCount*100/($width*$height) #initial completion count
+	
 	while comp<100 do
+		puts "\e[H\e[2J" #nice and neat
 		display_board
+		
 		puts "Number of turns: #{x}"
 		puts "Current completion: #{comp}%"
 		print "Pick a colour:"
@@ -105,8 +103,10 @@ def play_game
 			puts "Unrecognized colour. Try again!"
 			next
 		end
-		fieldsCount=0
-		update(choice, 0, 0)
+		update(choice, 0, 0) #updating the board with the colour of choice
+		fieldsCount=0 #important reset!
+
+		#counting the completion
 		for i in 0..$board.length-1
 			for j in 0..$board[i].length-1
 				if $board[i][j]==choice
@@ -115,9 +115,10 @@ def play_game
 			end
 		end
 		comp=fieldsCount*100/($width*$height)
-		x+=1
-		# puts "\e[H\e[2J"
+		
+		x+=1 #move++
 	end
+
 	display_board
 	puts "Congratulations! You have completed the board in #{x} steps."
 	if x<$record || $record==-1
@@ -138,7 +139,7 @@ splash.write_right_pattern("0", {:fg=>:light_cyan})
 splash.write_bottom_pattern("*-..-*", {:fg=>:cyan})
 splash.write_top_pattern(".-**-.", {:fg=>:light_cyan})
 
-splash.write_header("Flood-It", "Sebastian Ksiazczyk", "0.1.0", 
+splash.write_header("Flood-It", "Sebastian Ksiazczyk", "1.0.0", 
         {:nameFg=>:light_magenta, :authorFg=>:light_green, :versionFg=>:yellow})
 splash.write_center(-5, "*press [ENTER] to continue*", :fg=>:light_magenta)
 
@@ -152,7 +153,6 @@ menu << "s: Start game"
 menu << "c: Change board size"
 menu << "q: Quit game"
 menu << "No games played yet"
-played=false #a boolean so ill change the last menu entry just once (record)
 
 # END OF MAIN MENU
 
@@ -171,12 +171,10 @@ if input=="\n"
 		elsif input=='s'
 			get_board($width, $height)
 			play_game
-			if played==false
-				menu[4]="Best game: #{$record} turns."
-				played=true
-			end
+			menu[4]="Best game: #{$record} turns."
 		else
 			puts "Undefined input. Please try again"
 		end
 	end	
 end
+#Good night!
