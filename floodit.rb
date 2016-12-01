@@ -114,7 +114,7 @@ def play_game
 				end
 			end
 		end
-		comp=fieldsCount/($width*$height)*100
+		comp=fieldsCount*100/($width*$height)
 		x+=1
 		# puts "\e[H\e[2J"
 	end
@@ -122,7 +122,7 @@ def play_game
 	puts "Congratulations! You have completed the board in #{x} steps."
 	if x<$record || $record==-1
 		puts "New record!"
-		record=x
+		$record=x
 	end
 
 end
