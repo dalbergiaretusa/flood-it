@@ -5,11 +5,34 @@ require 'bundler/setup'
 Bundler.require(:default)
 
 $width=14
-$length=9
+$height=9
 
 def get_board(width, height)
   # TODO: Implement this method
-  #
+  colours=[:red, :blue, :green, :yellow, :cyan, :magenta]
+  
+  board=[]
+  row=[]
+  
+  # creating the board with random colours
+  for i in 0..height-1
+  	row=[]
+  	for j in 0..width-1
+  		row << colours.sample
+  	end
+  	board << row
+  end
+  
+  #displaying the board
+
+  for i in 0..height-1
+  	for j in 0..width-1
+  		print "  ".colorize(:background => board[i][j])
+  	end
+  	puts
+  end
+  return board
+
   # This method should return a two-dimensional array.
   # Each element of the array should be one of the
   # following values (These are "symbols", you can use
@@ -27,17 +50,17 @@ def get_board(width, height)
 end
 
 def change_board_size
-	puts "Current board size: #{$width} x #{$length}"
+	puts "Current board size: #{$width} x #{$height}"
 	puts "Please enter your desired table size below:"
 	print "Width:"
 	$width=gets.chomp.to_i
-	print "Length:"
-	$length=gets.chomp.to_i
-	puts "The board size has been changed to #{$width} x #{$length}."
+	print "Height:"
+	$height=gets.chomp.to_i
+	puts "The board size has been changed to #{$width} x #{$height}."
 end
 
 def play_game(array)
-
+	
 end
 # SPLASH SCREEN
 splash = ConsoleSplash.new(20,60)
@@ -61,6 +84,7 @@ menu << "s: Start game"
 menu << "c: Change board size"
 menu << "q: Quit game"
 menu << "No games played yet"
+
 
 input=gets
 
