@@ -25,9 +25,9 @@ def get_board(width, height) #returns a randomly generated board
 end
 
 def display_board(board) #displays the board in colour
-	for i in 0..board.length-1
-  	for j in 0..board[i].length-1
-  		print "  ".colorize(:background => board[i][j])
+	board.each do |i|
+  	i.each do |j|
+  		print "  ".colorize(:background => j)
   	end
   	puts
   end
@@ -71,9 +71,9 @@ def play_game(board) #lets play
 	x=0 #move counter
 	fieldsCount=0
 	choice=board[0][0] #at the beginning of the game ill count the initial completion
-	for i in 0..board.length-1
-		for j in 0..board[i].length-1
-			if board[i][j]==choice
+	board.each do |i|
+		i.each do |j|
+			if j==choice
 				fieldsCount+=1
 			end
 		end
@@ -108,9 +108,9 @@ def play_game(board) #lets play
 		fieldsCount=0 #important reset!
 
 		#counting the completion
-		for i in 0..board.length-1
-			for j in 0..board[i].length-1
-				if board[i][j]==choice
+		board.each do |i|
+			i.each do |j|
+				if j==choice
 					fieldsCount+=1
 				end
 			end
